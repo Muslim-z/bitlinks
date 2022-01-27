@@ -1,10 +1,11 @@
 import os
+from urllib.parse import urlparse
 from dotenv import load_dotenv
 import requests
 
 
 def shorten_link(token, url):
-    parara = {
+    params = {
         'Authorization': f'Bearer {token}'
     }
     payload = {
@@ -12,7 +13,7 @@ def shorten_link(token, url):
     }
     response = requests.post(
         'https://api-ssl.bitly.com/v4/shorten',
-        headers=parara,
+        headers=params,
         json=payload
     )
     response.raise_for_status()
@@ -20,41 +21,45 @@ def shorten_link(token, url):
 
 
 def count_clicks(token, bitlink):
-    parara = {
+    params = {
         'Authorization': f'Bearer {token}'
     }
 
     response = requests.get(
         f'https://api-ssl.bitly.com/v4/bitlinks/{bitlink}/clicks/summary',
-        headers=parara
+        headers=params
     )
     response.raise_for_status()
     return response.json()['total_clicks']
 
 
 def is_bitlink(token, bitlink):
-    parara = {
+    params = {
         'Authorization': f'Bearer {token}'
     }
     response = requests.get(
         f'https://api-ssl.bitly.com/v4/bitlinks/{bitlink}',
-        headers=parara
+        headers=params
     )
     return response.ok
 
 
 if __name__ == '__main__':
     load_dotenv()
-    url = input()
+    print(
+        'Введите ссылку для сокращения, или Битлинк для просмотра переходов по нему'
+    )
+    url = input('Ваша ссылка или Битлинк: ')
+    parsed_url = urlparse(url)
     token = os.getenv('TOKEN')
-    if is_bitlink(token, url):
+    if is_bitlink(token, parsed_url.netloc + parsed_url.path):
         try:
-            print(count_clicks(token, url))
+            print(f'Количество переходов: {count_clicks(token, parsed_url.netloc + parsed_url.path)}')
         except requests.exceptions.HTTPError:
-            print("неудалось посчитать кол-во кликов, опечатки в ссылке")
+            print('Неудалось посчитать кол-во кликов, опечатки в ссылке')
     else:
         try:
             print('Битлинк ' + shorten_link(token, url))
 
         except requests.exceptions.HTTPError:
-            print("ошибка при сокращении ссылки.")
+            print('Ошибка при сокращении ссылки.')
