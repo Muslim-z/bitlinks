@@ -1,7 +1,8 @@
 import os
 from urllib.parse import urlparse
-from dotenv import load_dotenv
+
 import requests
+from dotenv import load_dotenv
 
 
 def shorten_link(token, url):
@@ -51,15 +52,15 @@ if __name__ == '__main__':
     )
     url = input('Ваша ссылка или Битлинк: ')
     parsed_url = urlparse(url)
-    token = os.getenv('TOKEN')
-    if is_bitlink(token, parsed_url.netloc + parsed_url.path):
+    bitly_token = os.getenv('BITLY_TOKEN')
+    if is_bitlink(bitly_token, parsed_url.netloc + parsed_url.path):
         try:
-            print(f'Количество переходов: {count_clicks(token, parsed_url.netloc + parsed_url.path)}')
+            print(f'Количество переходов: {count_clicks(bitly_token, parsed_url.netloc + parsed_url.path)}')
         except requests.exceptions.HTTPError:
-            print('Неудалось посчитать кол-во кликов, опечатки в ссылке')
+            print('Не удалось посчитать кол-во кликов, опечатки в ссылке')
     else:
         try:
-            print('Битлинк ' + shorten_link(token, url))
+            print('Битлинк ' + shorten_link(bitly_token, url))
 
         except requests.exceptions.HTTPError:
             print('Ошибка при сокращении ссылки.')
