@@ -55,11 +55,15 @@ if __name__ == '__main__':
     parsed_url = urlparse(url)
     bitly_token = os.getenv('BITLY_TOKEN')
     url_without_scheme = f'{parsed_url.netloc}{parsed_url.path}'
+
     if is_bitlink(bitly_token, url_without_scheme):
         try:
-            print(f'Количество переходов: {count_clicks(bitly_token, url_without_scheme)}')
+            bitly_clicks_count = count_clicks(bitly_token, url_without_scheme)
+            print(f'Количество переходов: {bitly_clicks_count}')
+
         except requests.exceptions.HTTPError:
             print('Не удалось посчитать кол-во кликов, опечатки в ссылке')
+
     else:
         try:
             print('Битлинк ' + shorten_link(bitly_token, url))
