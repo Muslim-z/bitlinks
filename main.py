@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     else:
         try:
-            print('Битлинк ' + shorten_link(bitly_token, url))
+            print(f'Битлинк{shorten_link(bitly_token, url)}')
 
         except requests.exceptions.HTTPError:
             print('Ошибка при сокращении ссылки.')
