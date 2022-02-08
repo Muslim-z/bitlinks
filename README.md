@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 Пример: 
  ```
- TOKEN=ft342t4ft4f3uf234uygyfda3f3ds
+ BITLY_TOKEN=ft342t4ft4f3uf234uygyfda3f3ds
  ```
 
 ## Как запустить.
