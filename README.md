@@ -22,9 +22,9 @@ pip install -r requirements.txt
 2. Найдите путь к файлу `main.py`.
 3. Напишите в командной строке команду:
  ```
- python main.py
+ python main.py url
  ```
-
+url - ваша ссылка или битлинк
 Программа запустится.
 
 
